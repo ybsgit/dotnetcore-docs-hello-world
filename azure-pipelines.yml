@@ -1,0 +1,21 @@
+pool:
+   vmImage: 'ubuntu-latest'
+
+steps:
+- bash: ls -l
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+- bash: ls -l
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+- bash: ls -l
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'whcca927 account connection'
+    appType: 'webApp'
+    WebAppName: 'newdotdotcode'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
