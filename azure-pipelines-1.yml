@@ -23,9 +23,9 @@ steps:
     SlotName: 'staging'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     RuntimeStack: 'DOTNETCORE|6.0'
-
-- task: ManualValidation@0
+- task: Delay@1
   inputs:
+    delayForMinutes: '2'
 - task: AzureAppServiceManage@0
   inputs:
     azureSubscription: 'whcca927 account connection'
