@@ -19,3 +19,4 @@ steps:
     appType: 'webAppLinux'
     WebAppName: 'mywebapp87678'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    RuntimeStack: 'DOTNETCORE|6.0'
