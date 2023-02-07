@@ -1,35 +1,44 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
+jobs:
+- job: Buildanddeploy 
+  pool:
+    vmImage: ubuntu-latest
 
-steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'whcca927 account connection'
-    appType: 'webAppLinux'
-    WebAppName: 'mywebapp87678'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'myapp-rg'
-    SlotName: 'staging'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    RuntimeStack: 'DOTNETCORE|6.0'
-- task: Delay@1
-  inputs:
-    delayForMinutes: '2'
-- task: AzureAppServiceManage@0
-  inputs:
-    azureSubscription: 'whcca927 account connection'
-    Action: 'Swap Slots'
-    WebAppName: 'mywebapp87678'
-    ResourceGroupName: 'myapp-rg'
-    SourceSlot: 'staging'
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: true
+  - task: AzureRmWebAppDeployment@4
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'whcca927 account connection'
+      appType: 'webAppLinux'
+      WebAppName: 'mywebapp87678'
+      deployToSlotOrASE: true
+      ResourceGroupName: 'myapp-rg'
+      SlotName: 'staging'
+      packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+      RuntimeStack: 'DOTNETCORE|6.0'
+- job: deplay
+  dependsOn: Buildanddeploy 
+  pool: server 
+  steps:
+  - task: Delay@1
+    inputs:
+      delayForMinutes: '2'
+- job: swap
+  dependsOn: deplay 
+  steps:
+  - task: AzureAppServiceManage@0
+    inputs:
+      azureSubscription: 'whcca927 account connection'
+      Action: 'Swap Slots'
+      WebAppName: 'mywebapp87678'
+      ResourceGroupName: 'myapp-rg'
+      SourceSlot: 'staging'
