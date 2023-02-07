@@ -18,5 +18,19 @@ steps:
     azureSubscription: 'whcca927 account connection'
     appType: 'webAppLinux'
     WebAppName: 'mywebapp87678'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'myapp-rg'
+    SlotName: 'staging'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     RuntimeStack: 'DOTNETCORE|6.0'
+
+- task: ManualIntervention@8
+  inputs:
+    instructions: 'Check the web app'
+- task: AzureAppServiceManage@0
+  inputs:
+    azureSubscription: 'whcca927 account connection'
+    Action: 'Swap Slots'
+    WebAppName: 'mywebapp87678'
+    ResourceGroupName: 'myapp-rg'
+    SourceSlot: 'staging'
