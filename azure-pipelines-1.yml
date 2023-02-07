@@ -1,0 +1,21 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'whcca927 account connection'
+    appType: 'webAppLinux'
+    WebAppName: 'mywebapp87678'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
