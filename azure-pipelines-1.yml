@@ -24,9 +24,8 @@ steps:
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     RuntimeStack: 'DOTNETCORE|6.0'
 
-- task: ManualIntervention@8
+- task: ManualValidation@0
   inputs:
-    instructions: 'Check the web app'
 - task: AzureAppServiceManage@0
   inputs:
     azureSubscription: 'whcca927 account connection'
